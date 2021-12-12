@@ -42,7 +42,7 @@ func recordDomain(domain string, allDomains map[string]int) {
 
 }
 
-func ImportCustomers() {
+func ImportCustomers() map[string]int {
 	file, err := os.Open("customers.csv")
 	if err != nil {
 		log.Fatal(err)
@@ -79,5 +79,7 @@ func ImportCustomers() {
 		}
 
 		recordDomain(customerDomain, allDomains)
+
 	}
+	return allDomains
 }

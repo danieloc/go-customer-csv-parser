@@ -1,9 +1,12 @@
 package main
 
 import (
+	"fmt"
+
 	"github.com/danieloc/go-customer-csv/customerimporter"
 )
 
 func main() {
-	customerimporter.ImportCustomers()
+	domains := customerimporter.ImportCustomers()
+	fmt.Println(domains)
 }
