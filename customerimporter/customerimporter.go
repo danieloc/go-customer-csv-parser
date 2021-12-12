@@ -8,6 +8,7 @@ package customerimporter
 import (
 	"bufio"
 	"encoding/csv"
+	"fmt"
 	"io"
 	"log"
 	"os"
@@ -32,6 +33,10 @@ func getDomain(email string) string {
 	return domain
 }
 
+func recordDomain(domains map[string]int, domain string) {
+
+}
+
 func ImportCustomers() {
 	file, err := os.Open("customers.csv")
 	if err != nil {
@@ -44,6 +49,7 @@ func ImportCustomers() {
 	if err != nil {
 		log.Fatal(headerErr)
 	}
+
 	for {
 		row, err := reader.Read()
 		if err == io.EOF {
@@ -56,7 +62,7 @@ func ImportCustomers() {
 			email: row[email],
 		}
 
-		domain := getDomain(cust.email)
-
+		customerDomain := getDomain(cust.email)
+		fmt.Println(customerDomain)
 	}
 }
