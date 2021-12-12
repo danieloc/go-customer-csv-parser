@@ -8,6 +8,8 @@ package customerimporter
 import (
 	"bufio"
 	"encoding/csv"
+	"errors"
+	"fmt"
 	"io"
 	"log"
 	"os"
@@ -26,10 +28,13 @@ const (
 	ip_address
 )
 
-func getDomain(email string) string {
+func getDomain(email string) (string, error) {
 	components := strings.Split(email, "@")
+	if len(components) != 2 {
+		return "", errors.New("Missing domain")
+	}
 	_, domain := components[0], components[1]
-	return domain
+	return domain, nil
 }
 
 func recordDomain(domain string, allDomains map[string]int) {
@@ -64,7 +69,12 @@ func ImportCustomers() {
 			email: row[email],
 		}
 
-		customerDomain := getDomain(cust.email)
+		customerDomain, err := getDomain(cust.email)
+		if err != nil {
+			fmt.Println("Missing domain in email", cust.email)
+			continue
+		}
+
 		recordDomain(customerDomain, allDomains)
 	}
 }
