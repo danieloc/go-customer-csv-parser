@@ -8,18 +8,14 @@ package customerimporter
 import (
 	"bufio"
 	"encoding/csv"
-	"fmt"
 	"io"
 	"log"
 	"os"
+	"strings"
 )
 
 type Customer struct {
-	first_name string
-	last_name  string
-	email      string
-	gender     string
-	ip_address string
+	email string
 }
 
 const (
@@ -29,6 +25,12 @@ const (
 	gender
 	ip_address
 )
+
+func getDomain(email string) string {
+	components := strings.Split(email, "@")
+	_, domain := components[0], components[1]
+	return domain
+}
 
 func ImportCustomers() {
 	file, err := os.Open("customers.csv")
@@ -50,12 +52,11 @@ func ImportCustomers() {
 		if err != nil {
 			log.Fatal(err)
 		}
-		fmt.Println(Customer{
-			first_name: row[first_name],
-			last_name:  row[last_name],
-			email:      row[email],
-			gender:     row[gender],
-			ip_address: row[ip_address],
-		})
+		cust := Customer{
+			email: row[email],
+		}
+
+		domain := getDomain(cust.email)
+
 	}
 }
