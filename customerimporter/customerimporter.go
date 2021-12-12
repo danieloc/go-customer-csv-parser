@@ -74,7 +74,7 @@ func ImportCustomers() {
 
 		customerDomain, err := getDomain(cust.email)
 		if err != nil {
-			fmt.Printf("Row: %d: Email Address was misconfigured: %s\n", rowNo, cust.email)
+			fmt.Printf("Skipping Row: %d: Email Address was misconfigured: %s\n", rowNo, cust.email)
 			continue
 		}
 
