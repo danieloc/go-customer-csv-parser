@@ -57,7 +57,10 @@ func ImportCustomers() {
 
 	allDomains := make(map[string]int)
 
+	rowNo := 0
+
 	for {
+		rowNo++
 		row, err := reader.Read()
 		if err == io.EOF {
 			break
@@ -71,7 +74,7 @@ func ImportCustomers() {
 
 		customerDomain, err := getDomain(cust.email)
 		if err != nil {
-			fmt.Println("Missing domain in email", cust.email)
+			fmt.Printf("Row: %d: Email Address was misconfigured: %s\n", rowNo, cust.email)
 			continue
 		}
 
