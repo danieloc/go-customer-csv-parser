@@ -16,15 +16,18 @@ var testCases = []TestCases{
 	{inputFile: "testdata/multiple-customers.csv", expected: map[string]int{"github.io": 1, "cyberchimps.com": 1, "hubpages.com": 1}},
 	{inputFile: "testdata/multiple-customers-single-domain.csv", expected: map[string]int{"github.io": 3}},
 
-	// Unhappy Path
+	{inputFile: "testdata/file-without-domains.csv", expected: make(map[string]int)},
 	{inputFile: "testdata/this-file-does-not-exist.csv", expectedError: true},
 }
 
 func TestReadFile(t *testing.T) {
 	for _, test := range testCases {
 		result, err := ImportCustomers(test.inputFile)
-		if test.expectedError && err == nil {
-			t.Fatal("Expected Error to be returned")
+		if test.expectedError {
+			if err == nil {
+				t.Fatal("Expected Error to be returned")
+			}
+			continue
 		}
 		if err != nil {
 			t.Fatalf("Did not expect to receive error: \n%v\n", err)
