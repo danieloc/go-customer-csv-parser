@@ -11,7 +11,9 @@ type TestCases struct {
 }
 
 var testCases = []TestCases{
-	{inputFile: "testdata/test-1.csv", expected: map[string]int{"github.io": 1}},
+	{inputFile: "testdata/single-valid-customer.csv", expected: map[string]int{"github.io": 1}},
+	{inputFile: "testdata/multiple-valid-customers.csv", expected: map[string]int{"github.io": 1, "cyberchimps.com": 1, "hubpages.com": 1}},
+	{inputFile: "testdata/multiple-customers-single-domain.csv", expected: map[string]int{"github.io": 3}},
 }
 
 func TestReadFile(t *testing.T) {
