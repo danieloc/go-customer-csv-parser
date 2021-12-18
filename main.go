@@ -7,6 +7,9 @@ import (
 )
 
 func main() {
-	domains := customerimporter.ImportCustomers()
+	domains, err := customerimporter.ImportCustomers("customers.csv")
+	if err != nil {
+		fmt.Println("Unexpected Error", err)
+	}
 	fmt.Println(domains)
 }

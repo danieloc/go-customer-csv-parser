@@ -11,7 +11,6 @@ import (
 	"errors"
 	"fmt"
 	"io"
-	"log"
 	"os"
 	"strings"
 )
@@ -42,20 +41,20 @@ func recordDomain(domain string, allDomains map[string]int) {
 
 }
 
-func ImportCustomers() map[string]int {
-	file, err := os.Open("customers.csv")
+func ImportCustomers(fileName string) (map[string]int, error) {
+	file, err := os.Open(fileName)
+	allDomains := make(map[string]int)
 	if err != nil {
-		log.Fatal(err)
+		return allDomains, errors.New("Failed to Open file")
 	}
 
 	reader := csv.NewReader(bufio.NewReader(file))
+
 	//Discard the header
 	_, headerErr := reader.Read()
-	if err != nil {
-		log.Fatal(headerErr)
+	if headerErr != nil {
+		return allDomains, errors.New("Failed to read header")
 	}
-
-	allDomains := make(map[string]int)
 
 	rowNo := 0
 
@@ -66,14 +65,14 @@ func ImportCustomers() map[string]int {
 			break
 		}
 		if err != nil {
-			log.Fatal(err)
+			return allDomains, errors.New("Failed to read row")
 		}
 		cust := Customer{
 			email: row[email],
 		}
 
-		customerDomain, err := getDomain(cust.email)
-		if err != nil {
+		customerDomain, getDomainErr := getDomain(cust.email)
+		if getDomainErr != nil {
 			fmt.Printf("Skipping Row: %d: Email Address was misconfigured: %s\n", rowNo, cust.email)
 			continue
 		}
@@ -81,5 +80,5 @@ func ImportCustomers() map[string]int {
 		recordDomain(customerDomain, allDomains)
 
 	}
-	return allDomains
+	return allDomains, nil
 }
